@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { httpLogger, logger } from './utils/logger.js';
+import { logger } from './utils/logger.js';
 import { errorHandler } from './utils/errorHandler.js';
 import { generalLimiter } from './middlewares/rateLimiter.js';
 
@@ -47,7 +47,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Logging
 if (process.env.NODE_ENV !== 'test') {
-  app.use(httpLogger);
+  app.use(logger);
 }
 
 // Rate limiting

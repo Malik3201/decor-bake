@@ -28,21 +28,23 @@ const server = await startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  console.error('UNHANDLED REJECTION! 💥');
-  console.error(err);
-  // In serverless, we log and let the function finish or time out
-  // server.close() is not strictly needed for serverless functions
+  console.error('Unhandled Rejection:', err);
+  server.close(() => {
+    process.exit(1);
+  });
 });
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
-  console.error('UNCAUGHT EXCEPTION! 💥');
-  console.error(err);
-  // Manual exit is risky in serverless; prefer logging for visibility
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
 });
 
-// Graceful shutdown signals
+// Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received. Cleaning up...');
+  console.log('SIGTERM received. Shutting down gracefully...');
+  server.close(() => {
+    console.log('Process terminated');
+  });
 });
 
