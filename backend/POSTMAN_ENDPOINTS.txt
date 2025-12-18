@@ -1,0 +1,459 @@
+================================================================================
+                    DECOR-BAKE API ENDPOINTS FOR POSTMAN
+================================================================================
+
+BASE URL: http://localhost:5000/api/v1
+          (Replace with your Vercel URL when deployed)
+
+AUTHENTICATION:
+- All protected routes require: Authorization: Bearer <token>
+- Get token from /auth/login or /auth/register
+
+================================================================================
+1. AUTHENTICATION ENDPOINTS
+================================================================================
+
+POST   /auth/register
+Body: {
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+POST   /auth/login
+Body: {
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+POST   /auth/refresh-token
+Body: {
+  "refreshToken": "your_refresh_token"
+}
+
+POST   /auth/logout
+Headers: Authorization: Bearer <token>
+
+GET    /auth/me
+Headers: Authorization: Bearer <token>
+
+================================================================================
+2. ADMIN SETTINGS ENDPOINTS
+================================================================================
+
+GET    /admin/settings
+(Public - No auth required)
+
+PUT    /admin/settings
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "defaultShippingFee": 5.99,
+  "freeShippingThreshold": 50,
+  "announcementText": "Welcome!",
+  "siteStatus": "active",
+  "currency": "USD"
+}
+
+================================================================================
+3. CATEGORY ENDPOINTS
+================================================================================
+
+GET    /categories
+Query: ?isActive=true
+
+GET    /categories/:id
+
+GET    /categories/slug/:slug
+
+POST   /categories
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "name": "Electronics",
+  "image": "https://example.com/image.jpg",
+  "isActive": true,
+  "orderIndex": 1
+}
+
+PUT    /categories/:id
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "name": "Updated Name",
+  "isActive": false
+}
+
+DELETE /categories/:id
+Headers: Authorization: Bearer <admin_token>
+
+================================================================================
+4. PRODUCT ENDPOINTS
+================================================================================
+
+GET    /products
+Query: ?page=1&limit=20&categoryId=xxx&isActive=true&isFeatured=true&search=laptop&sortBy=price&sortOrder=asc
+
+GET    /products/featured
+Query: ?limit=10
+
+GET    /products/category/:categoryId
+Query: ?limit=20
+
+GET    /products/:id
+
+GET    /products/slug/:slug
+
+GET    /products/:id/price
+
+GET    /products/:id/shipping
+Query: ?cartTotal=45
+
+POST   /products
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "title": "Laptop",
+  "description": "High performance laptop",
+  "categoryId": "category_id",
+  "price": 999.99,
+  "images": ["url1", "url2"],
+  "isFeatured": true,
+  "isActive": true,
+  "productShippingFee": 10.99
+}
+
+PUT    /products/:id
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "price": 899.99,
+  "isFeatured": false
+}
+
+DELETE /products/:id
+Headers: Authorization: Bearer <admin_token>
+
+================================================================================
+5. OFFER ENDPOINTS
+================================================================================
+
+GET    /offers
+Query: ?page=1&limit=20&isActive=true&activeOnly=true
+
+GET    /offers/active
+
+GET    /offers/:id
+
+GET    /offers/:id/products
+
+POST   /offers
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "title": "Summer Sale",
+  "productIds": ["product_id1", "product_id2"],
+  "discountPercentage": 20,
+  "startDate": "2024-01-01T00:00:00.000Z",
+  "endDate": "2024-12-31T23:59:59.000Z",
+  "isActive": true
+}
+
+PUT    /offers/:id
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "discountPercentage": 25
+}
+
+DELETE /offers/:id
+Headers: Authorization: Bearer <admin_token>
+
+================================================================================
+6. FILE UPLOAD ENDPOINTS
+================================================================================
+
+POST   /upload/single
+Headers: Authorization: Bearer <admin_token>
+Content-Type: multipart/form-data
+Body: Form-data
+  - image: <file>
+
+POST   /upload/multiple
+Headers: Authorization: Bearer <admin_token>
+Content-Type: multipart/form-data
+Body: Form-data
+  - images: <file1>
+  - images: <file2>
+
+================================================================================
+7. ADDRESS ENDPOINTS
+================================================================================
+
+GET    /addresses
+Headers: Authorization: Bearer <token>
+
+GET    /addresses/default
+Headers: Authorization: Bearer <token>
+
+GET    /addresses/:id
+Headers: Authorization: Bearer <token>
+
+POST   /addresses
+Headers: Authorization: Bearer <token>
+Body: {
+  "fullName": "John Doe",
+  "phone": "1234567890",
+  "addressLine1": "123 Main St",
+  "addressLine2": "Apt 4B",
+  "city": "New York",
+  "state": "NY",
+  "postalCode": "10001",
+  "country": "United States",
+  "isDefault": true
+}
+
+PUT    /addresses/:id
+Headers: Authorization: Bearer <token>
+Body: {
+  "city": "Los Angeles",
+  "isDefault": false
+}
+
+DELETE /addresses/:id
+Headers: Authorization: Bearer <token>
+
+================================================================================
+8. CART ENDPOINTS
+================================================================================
+
+GET    /cart
+Headers: Authorization: Bearer <token>
+
+POST   /cart/items
+Headers: Authorization: Bearer <token>
+Body: {
+  "productId": "product_id",
+  "quantity": 2,
+  "variants": {
+    "color": "red",
+    "size": "large"
+  }
+}
+
+PUT    /cart/items/:itemId
+Headers: Authorization: Bearer <token>
+Body: {
+  "quantity": 3
+}
+
+DELETE /cart/items/:itemId
+Headers: Authorization: Bearer <token>
+
+DELETE /cart/clear
+Headers: Authorization: Bearer <token>
+
+POST   /cart/promo
+Headers: Authorization: Bearer <token>
+Body: {
+  "promoCode": "SUMMER20"
+}
+
+DELETE /cart/promo
+Headers: Authorization: Bearer <token>
+
+================================================================================
+9. PROMO CODE ENDPOINTS
+================================================================================
+
+POST   /promos/validate
+Body: {
+  "promoCode": "SUMMER20",
+  "cartTotal": 100
+}
+
+GET    /promos
+Headers: Authorization: Bearer <admin_token>
+Query: ?page=1&limit=20&isActive=true&expired=false
+
+GET    /promos/:id
+Headers: Authorization: Bearer <admin_token>
+
+POST   /promos
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "code": "SUMMER20",
+  "discountType": "percentage",
+  "discountValue": 20,
+  "usageLimit": 100,
+  "expiryDate": "2024-12-31T23:59:59.000Z",
+  "isActive": true,
+  "minPurchaseAmount": 50,
+  "maxDiscountAmount": 100
+}
+
+PUT    /promos/:id
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "discountValue": 25
+}
+
+DELETE /promos/:id
+Headers: Authorization: Bearer <admin_token>
+
+================================================================================
+10. ORDER ENDPOINTS
+================================================================================
+
+POST   /orders
+Headers: Authorization: Bearer <token>
+Body: {
+  "addressId": "address_id",
+  "paymentMethod": "card",
+  "notes": "Please deliver in morning"
+}
+
+GET    /orders/my-orders
+Headers: Authorization: Bearer <token>
+Query: ?page=1&limit=20&status=pending
+
+GET    /orders/order-number/:orderNumber
+Headers: Authorization: Bearer <token>
+
+GET    /orders/:id
+Headers: Authorization: Bearer <token>
+
+PUT    /orders/:id/cancel
+Headers: Authorization: Bearer <token>
+
+GET    /orders
+Headers: Authorization: Bearer <admin_token>
+Query: ?page=1&limit=20&status=confirmed&paymentStatus=completed
+
+PUT    /orders/:id/status
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "status": "shipped",
+  "trackingNumber": "TRACK123456",
+  "notes": "Shipped via FedEx"
+}
+
+PUT    /orders/:id/payment-status
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "paymentStatus": "completed",
+  "paymentIntentId": "pi_xxx"
+}
+
+================================================================================
+11. PAYMENT ENDPOINTS
+================================================================================
+
+POST   /payments/intent
+Headers: Authorization: Bearer <token>
+Body: {
+  "orderId": "order_id"
+}
+
+POST   /payments/confirm
+Headers: Authorization: Bearer <token>
+Body: {
+  "paymentIntentId": "pi_xxx"
+}
+
+POST   /payments/cancel
+Headers: Authorization: Bearer <token>
+Body: {
+  "paymentIntentId": "pi_xxx"
+}
+
+GET    /payments/order/:orderId
+Headers: Authorization: Bearer <token>
+
+GET    /payments/:id
+Headers: Authorization: Bearer <token>
+
+POST   /payments/:id/refund
+Headers: Authorization: Bearer <admin_token>
+Body: {
+  "amount": 50.00
+}
+
+POST   /payments/webhook
+(No auth - uses signature verification)
+Body: <webhook payload>
+
+================================================================================
+12. HEALTH CHECK
+================================================================================
+
+GET    /health
+(No auth required)
+
+================================================================================
+TESTING WORKFLOW
+================================================================================
+
+1. Register a new user:
+   POST /auth/register
+
+2. Login to get token:
+   POST /auth/login
+   Copy the "token" from response
+
+3. Set token in Postman:
+   - Go to Authorization tab
+   - Select "Bearer Token"
+   - Paste your token
+
+4. Create an admin user (manually in DB or use existing):
+   - Set role: "admin" in User document
+
+5. Test admin endpoints with admin token
+
+6. Test user endpoints with user token
+
+================================================================================
+COMMON RESPONSE FORMATS
+================================================================================
+
+Success Response:
+{
+  "success": true,
+  "data": { ... },
+  "message": "Optional message"
+}
+
+Error Response:
+{
+  "success": false,
+  "error": "Error message"
+}
+
+Pagination Response:
+{
+  "success": true,
+  "count": 10,
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "pages": 5
+  },
+  "data": [ ... ]
+}
+
+================================================================================
+ENVIRONMENT VARIABLES NEEDED
+================================================================================
+
+MONGODB_URI=mongodb://localhost:27017/decor-bake
+JWT_SECRET=your-secret-key
+JWT_REFRESH_SECRET=your-refresh-secret-key
+PORT=5000
+
+================================================================================
+NOTES
+================================================================================
+
+- Rate Limiting: 100 requests per 15 minutes (general), 5 requests per 15 minutes (auth)
+- All prices are in the currency specified in settings
+- Cart automatically recalculates prices with offers
+- Orders create immutable snapshots of products and addresses
+- Payment uses mock processor - replace with real gateway in production
+
+================================================================================
+
