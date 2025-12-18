@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { logger } from './utils/logger.js';
+import { httpLogger, logger } from './utils/logger.js';
 import { errorHandler } from './utils/errorHandler.js';
 import { generalLimiter } from './middlewares/rateLimiter.js';
 
@@ -47,18 +47,15 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Logging
 if (process.env.NODE_ENV !== 'test') {
-  app.use(logger);
+  app.use(httpLogger);
 }
 
 // Rate limiting
 app.use('/api/v1', generalLimiter);
 
-// Serve static files (uploads) - TEMPORARY: Static serving disabled for serverless compatibility
-// TODO: Replace with Cloudinary/S3 URL handling in the frontend/backend
-/*
+// Serve static files (uploads)
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 app.use('/uploads', express.static(path.join(process.cwd(), uploadDir)));
-*/
 
 // Health check
 app.get('/health', (req, res) => {

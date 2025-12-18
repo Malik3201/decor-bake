@@ -1,23 +1,16 @@
 import multer from 'multer';
 import path from 'path';
-// import fs from 'fs'; // TEMPORARY: Disabled for serverless compatibility
+import fs from 'fs';
 import { AppError } from '../utils/errorHandler.js';
 import { FILE_UPLOAD } from '../config/constants.js';
 
-// TEMPORARY: Disabled directory creation for serverless environment (Vercel)
-// TODO: Replace with Cloudinary or S3 for persistent storage
-/*
+// Ensure upload directory exists
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
-*/
 
-// Configure storage - Use memoryStorage for serverless to avoid ENOENT errors
-// TEMPORARY: Disk storage is disabled. Files will only exist in memory for the duration of the request.
-const storage = multer.memoryStorage();
-
-/*
+// Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -28,9 +21,8 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + uniqueSuffix + ext);
   },
 });
-*/
 
-// File filter (remains the same as it doesn't touch the filesystem)
+// File filter
 const fileFilter = (req, file, cb) => {
   if (FILE_UPLOAD.ALLOWED_TYPES.includes(file.mimetype)) {
     cb(null, true);
@@ -68,13 +60,6 @@ export const uploadSingle = (fieldName = 'image') => {
         }
         return next(err);
       }
-      
-      // TEMPORARY: If using memoryStorage, req.file.filename will be undefined because it's not saved to disk.
-      // We set a placeholder name to avoid breaking downstream logic if it expects a filename.
-      if (req.file) {
-        req.file.filename = `temp-${Date.now()}-${req.file.originalname}`;
-      }
-      
       next();
     });
   };
@@ -97,14 +82,6 @@ export const uploadMultiple = (fieldName = 'images', maxCount = 10) => {
         }
         return next(err);
       }
-
-      // TEMPORARY: Set placeholder filenames for memoryStorage
-      if (req.files) {
-        req.files.forEach(file => {
-          file.filename = `temp-${Date.now()}-${file.originalname}`;
-        });
-      }
-
       next();
     });
   };
@@ -116,7 +93,6 @@ export const getFileUrl = (filename) => {
   if (filename.startsWith('http://') || filename.startsWith('https://')) {
     return filename;
   }
-  // TODO: Replace with Cloudinary/S3 URL
   return `/uploads/${filename}`;
 };
 

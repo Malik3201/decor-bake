@@ -21,14 +21,16 @@ export const errorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     console.error('DEBUG ERROR:', err);
   } else {
-    // Audit-style logging for production
-    logger.error({
-      message: err.message,
-      stack: err.stack,
-      url: req.originalUrl,
-      method: req.method,
-      userId: req.user?._id
-    });
+    // Fail-safe logging for production
+    try {
+      logger.error(err, {
+        url: req.originalUrl,
+        method: req.method,
+        userId: req.user?._id
+      });
+    } catch (logErr) {
+      console.error('FATAL: Logging failed during error handling', logErr);
+    }
   }
 
   // Mongoose bad ObjectId
