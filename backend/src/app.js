@@ -53,9 +53,12 @@ if (process.env.NODE_ENV !== 'test') {
 // Rate limiting
 app.use('/api/v1', generalLimiter);
 
-// Serve static files (uploads)
+// Serve static files (uploads) - TEMPORARY: Static serving disabled for serverless compatibility
+// TODO: Replace with Cloudinary/S3 URL handling in the frontend/backend
+/*
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 app.use('/uploads', express.static(path.join(process.cwd(), uploadDir)));
+*/
 
 // Health check
 app.get('/health', (req, res) => {
