@@ -1,16 +1,22 @@
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
+// import fs from 'fs'; // DISABLED: Local filesystem not allowed on Vercel
 import { AppError } from '../utils/errorHandler.js';
 import { FILE_UPLOAD } from '../config/constants.js';
 
-// Ensure upload directory exists
+// DISABLED: Local directory creation is not allowed in serverless environment
+/*
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
+*/
 
-// Configure storage
+// Configure storage - Use memoryStorage as a safe placeholder for serverless
+// TODO: Replace with Cloudinary or S3 for persistent storage
+const storage = multer.memoryStorage();
+
+/*
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -21,6 +27,7 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + uniqueSuffix + ext);
   },
 });
+*/
 
 // File filter
 const fileFilter = (req, file, cb) => {
@@ -60,6 +67,12 @@ export const uploadSingle = (fieldName = 'image') => {
         }
         return next(err);
       }
+      
+      // Memory storage doesn't set filename, so we set a temp one for compatibility
+      if (req.file) {
+        req.file.filename = `temp-${Date.now()}-${req.file.originalname}`;
+      }
+      
       next();
     });
   };
@@ -82,6 +95,14 @@ export const uploadMultiple = (fieldName = 'images', maxCount = 10) => {
         }
         return next(err);
       }
+
+      // Memory storage doesn't set filename, so we set temp ones for compatibility
+      if (req.files) {
+        req.files.forEach(file => {
+          file.filename = `temp-${Date.now()}-${file.originalname}`;
+        });
+      }
+
       next();
     });
   };
@@ -93,6 +114,7 @@ export const getFileUrl = (filename) => {
   if (filename.startsWith('http://') || filename.startsWith('https://')) {
     return filename;
   }
+  // TODO: Point to S3/Cloudinary URL in the future
   return `/uploads/${filename}`;
 };
 

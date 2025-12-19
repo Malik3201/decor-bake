@@ -15,7 +15,7 @@ import settingsRoutes from './routes/settingsRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import offerRoutes from './routes/offerRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js';
+// import uploadRoutes from './routes/uploadRoutes.js'; // DISABLED: Local uploads not allowed on Vercel
 import addressRoutes from './routes/addressRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import promoRoutes from './routes/promoRoutes.js';
@@ -53,9 +53,11 @@ if (process.env.NODE_ENV !== 'test') {
 // Rate limiting
 app.use('/api/v1', generalLimiter);
 
-// Serve static files (uploads)
+// Serve static files (uploads) - DISABLED: Local filesystem not allowed on Vercel
+/*
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 app.use('/uploads', express.static(path.join(process.cwd(), uploadDir)));
+*/
 
 // Health check
 app.get('/health', (req, res) => {
@@ -72,7 +74,7 @@ app.use('/api/v1/admin/settings', settingsRoutes);
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/offers', offerRoutes);
-app.use('/api/v1/upload', uploadRoutes);
+// app.use('/api/v1/upload', uploadRoutes); // DISABLED: Local uploads not allowed on Vercel
 app.use('/api/v1/addresses', addressRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/promos', promoRoutes);
