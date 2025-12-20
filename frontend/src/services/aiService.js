@@ -2,11 +2,10 @@ import api from './api.js';
 
 /**
  * Chat with AI assistant
- * @param {string} query - User's query
- * @returns {Promise<{response: string, assistant: string}>}
+ * @param {Array<{role: 'user' | 'assistant', content: string}>} messages - Conversation messages
+ * @returns {Promise<string>} AI reply
  */
-export const chatWithAI = async (query) => {
-  const response = await api.post('/ai/chat', { query });
-  return response.data.data;
+export const chatWithAI = async (messages) => {
+  const response = await api.post('/ai/chat', { messages });
+  return response.data.reply;
 };
-

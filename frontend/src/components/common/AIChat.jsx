@@ -93,25 +93,40 @@ export const AIChat = () => {
       content: userMessage,
       timestamp: new Date(),
     };
-    setMessages((prev) => [...prev, newUserMessage]);
+    const updatedMessages = [...messages, newUserMessage];
+    setMessages(updatedMessages);
     setIsLoading(true);
 
     try {
-      // Call AI API
-      const response = await chatWithAI(userMessage);
+      // Prepare messages array (only role and content, exclude timestamp)
+      const messagesForAPI = updatedMessages.map(({ role, content }) => ({
+        role,
+        content,
+      }));
+
+      // Call AI API with conversation history
+      const reply = await chatWithAI(messagesForAPI);
       
       // Add AI response
       const aiMessage = {
         role: 'assistant',
-        content: response.response,
+        content: reply,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       console.error('AI chat error:', error);
+      let errorContent = "Sorry, I'm having trouble right now. Please try again later!";
+      
+      if (error.response?.status === 503) {
+        errorContent = error.response?.data?.message || 'AI assistant is temporarily unavailable. Please try again later.';
+      } else if (error.response?.data?.message) {
+        errorContent = error.response.data.message;
+      }
+      
       const errorMessage = {
         role: 'assistant',
-        content: "Sorry, I'm having trouble right now. Please try again later!",
+        content: errorContent,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -121,14 +136,14 @@ export const AIChat = () => {
   };
 
   const formatMessage = (content) => {
-    // Split by newlines and format
-    const lines = content.split('\n').filter(line => line.trim());
-    return lines.map((line, index) => (
-      <span key={index}>
-        {line}
-        {index < lines.length - 1 && <br />}
-      </span>
-    ));
+    // Simple markdown-like formatting for bold (**text**)
+    const parts = content.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={index}>{part.slice(2, -2)}</strong>;
+      }
+      return <span key={index}>{part}</span>;
+    });
   };
 
   return (
@@ -181,9 +196,9 @@ export const AIChat = () => {
                       : 'bg-white text-gray-800 border border-gray-200'
                   }`}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                  <div className="text-sm leading-relaxed whitespace-pre-wrap">
                     {formatMessage(message.content)}
-                  </p>
+                  </div>
                 </div>
               </div>
             ))}

@@ -34,9 +34,11 @@ export const getWebsiteKnowledge = async () => {
 };
 
 /**
- * Generate AI messages
+ * Generate system message with website knowledge
  */
-export const generateAIMessages = (userQuery, knowledgeBase) => {
+const generateSystemMessage = async () => {
+  const knowledgeBase = await getWebsiteKnowledge();
+  
   const categoriesList = knowledgeBase.categories
     .map(cat => `- ${cat.name}`)
     .join('\n');
@@ -46,76 +48,97 @@ export const generateAIMessages = (userQuery, knowledgeBase) => {
     .map(prod => `- ${prod.title} (Category: ${prod.category})`)
     .join('\n');
 
-  const systemMessage = `
-You are Coco, the AI assistant of this website.
-
-STRICT RULES:
-- Max 4 lines response
-- Clean and simple formatting
-- Website-related help only
-- NEVER discuss prices or costs
-- Be friendly and professional
-
-WEBSITE DATA:
-
-Categories:
-${categoriesList}
-
-Products:
-${productsList}
-`;
-
-  return [
-    { role: 'system', content: systemMessage.trim() },
-    { role: 'user', content: userQuery },
-  ];
+    return `
+    You are Coco, the DecoraBake cake assistant for a premium ecommerce store.
+    
+    **Tone**: Super friendly, helpful, warm, and concise. Use natural conversational style.  
+    **Emojis**: Use sparingly to highlight excitement or friendliness (like 🍓🎂✨), but keep it classy.
+    
+    **Formatting**: 
+    - Short paragraphs (1-2 sentences)
+    - Bullet points for lists
+    - Bold key items or suggestions
+    - Keep responses clean and visually readable
+    - Maximum 4 lines
+    
+    **Capabilities**:
+    - Suggest cake flavors, custom designs, and decorations 🎂
+    - Recommend pairings or complementary products 🍓
+    - Help users navigate categories or find specific items
+    - Encourage custom orders if the exact product isn’t available
+    
+    **Restrictions**:
+    - Never mention prices, discounts, or rates
+    - Avoid saying “product not found” in a blunt way
+    - Keep responses positive and encouraging
+    
+    **Website Knowledge**:
+    
+    Available Categories:
+    ${categoriesList}
+    
+    Available Products (sample):
+    ${productsList}
+    `.trim();
 };
 
 /**
- * Call LongCat AI API
+ * Chat with AI using LongCat AI
  */
-export const callAIAPI = async (messages) => {
-  const { AI_API_BASE, AI_API_KEY, AI_MODEL } = process.env;
+export const aiChat = async (messages) => {
+  const apiKey = process.env.AI_API_KEY;
+  const model = process.env.AI_MODEL || 'LongCat-Flash-Chat';
+  // Use the full endpoint URL directly - don't append /chat/completions
+  const baseUrl = process.env.AI_BASE_URL || 'https://api.longcat.chat/openai/v1/chat/completions';
 
-  if (!AI_API_BASE || !AI_API_KEY || !AI_MODEL) {
-    throw new AppError('AI environment variables are missing', 500);
+  if (!apiKey) {
+    const err = new AppError('AI API key not configured');
+    err.statusCode = 503;
+    throw err;
   }
 
-  try {
-    const apiUrl = `${AI_API_BASE.replace(/\/$/, '')}/chat/completions`;
+  // Generate system message with website knowledge
+  const systemContent = await generateSystemMessage();
 
-    const response = await fetch(apiUrl, {
+  const body = {
+    model,
+    messages: [
+      { role: 'system', content: systemContent },
+      ...messages,
+    ],
+    max_tokens: process.env.AI_MAX_TOKENS ? parseInt(process.env.AI_MAX_TOKENS) : 1500,
+    temperature: 0.7,
+  };
+
+  try {
+    // Use baseUrl directly - it should be the complete endpoint URL
+    const resp = await fetch(baseUrl, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${AI_API_KEY}`,
       },
-      body: JSON.stringify({
-        model: AI_MODEL,
-        messages,
-        temperature: 0.4,
-        max_tokens: 180,
-      }),
+      body: JSON.stringify(body),
     });
 
-    if (!response.ok) {
-      const err = await response.text();
-      throw new AppError(err, response.status);
+    if (!resp.ok) {
+      const text = await resp.text();
+      const err = new AppError('AI request failed');
+      err.statusCode = resp.status;
+      err.details = text;
+      throw err;
     }
 
-    const data = await response.json();
-    let reply = data?.choices?.[0]?.message?.content || '';
-
-    // Clean + max 4 lines
-    reply = reply
-      .split('\n')
-      .map(l => l.trim())
-      .filter(Boolean)
-      .slice(0, 4)
-      .join('\n');
-
-    return reply || 'Sorry, I could not respond properly.';
-  } catch (err) {
-    throw new AppError(`LongCat AI Error: ${err.message}`, 500);
+    const data = await resp.json();
+    const content = data.choices?.[0]?.message?.content || '';
+    return content;
+  } catch (error) {
+    console.error('AI error', error);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    const err = new AppError('AI temporarily unavailable');
+    err.statusCode = 503;
+    throw err;
   }
 };
