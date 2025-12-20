@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import api from '../services/api.js';
 import { STORAGE_KEYS } from '../utils/constants.js';
 
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
       const { user, token, refreshToken } = response.data.data;
@@ -47,12 +47,12 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Login failed',
+        error: error.meaningfulMessage || 'Login failed',
       };
     }
-  };
+  }, []);
 
-  const register = async (name, email, password) => {
+  const register = useCallback(async (name, email, password) => {
     try {
       const response = await api.post('/auth/register', { name, email, password });
       const { user, token, refreshToken } = response.data.data;
@@ -66,26 +66,26 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Registration failed',
+        error: error.meaningfulMessage || 'Registration failed',
       };
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.USER);
     setUser(null);
-  };
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     user,
     loading,
     login,
     register,
     logout,
     isAuthenticated: !!user,
-  };
+  }), [user, loading, login, register, logout]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

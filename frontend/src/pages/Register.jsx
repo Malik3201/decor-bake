@@ -19,6 +19,18 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Stricter validations
+    if (formData.name.trim().length < 3) {
+      showError('Full name must be at least 3 characters');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      showError('Please enter a valid email address');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       showError('Passwords do not match');
       return;
@@ -34,13 +46,13 @@ export const Register = () => {
     try {
       const result = await register(formData.name, formData.email, formData.password);
       if (result.success) {
-        success('Account created successfully!');
+        success('Welcome to Decor Bake! Account created successfully.');
         navigate('/');
       } else {
-        showError(result.error || 'Registration failed');
+        showError(result.error);
       }
     } catch (err) {
-      showError('An error occurred during registration');
+      showError(err.meaningfulMessage || 'An error occurred during registration');
     } finally {
       setLoading(false);
     }
@@ -50,9 +62,11 @@ export const Register = () => {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">DB</span>
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Decor Bake Logo" 
+            className="w-48 h-48 object-contain mx-auto mb-4" 
+          />
           <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
           <p className="mt-2 text-gray-600">Join us and start shopping</p>
         </div>

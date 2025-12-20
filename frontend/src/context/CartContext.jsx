@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { cartService } from '../services/cartService.js';
 import { useToast } from './ToastContext.jsx';
 import { useAuth } from './AuthContext.jsx';
@@ -145,7 +145,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const value = {
+  const value = useMemo(() => ({
     cart,
     loading,
     fetchCart,
@@ -157,7 +157,7 @@ export const CartProvider = ({ children }) => {
     removePromoCode,
     itemCount: cart?.items?.length || 0,
     total: cart?.total || 0,
-  };
+  }), [cart, loading, fetchCart]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

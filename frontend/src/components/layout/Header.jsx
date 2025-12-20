@@ -17,13 +17,14 @@ export const Header = memo(() => {
   return (
     <header className="bg-white shadow-soft sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">DB</span>
-            </div>
-            <span className="text-xl font-bold text-pink-600 hidden sm:block">Decor Bake</span>
+          <Link to="/" className="flex items-center py-2">
+            <img 
+              src="/logo.png" 
+              alt="Decor Bake Logo" 
+              className="w-28 h-28 md:w-36 md:h-36 object-contain" 
+            />
           </Link>
 
           {/* Navigation */}

@@ -36,15 +36,14 @@ export const HeaderWithCart = memo(() => {
     <>
       <header className="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-gray-100/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-18">
+          <div className="flex items-center justify-between h-20 md:h-24">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-pink-glow transition-shadow">
-                <span className="text-white font-bold text-xl">DB</span>
-              </div>
-              <span className="text-xl font-bold text-pink-600 hidden sm:block">
-                Decor Bake
-              </span>
+            <Link to="/" className="flex items-center group py-2">
+              <img 
+                src="/logo.png" 
+                alt="Decor Bake Logo" 
+                className="w-28 h-28 md:w-36 md:h-36 object-contain transition-transform group-hover:scale-105" 
+              />
             </Link>
 
             {/* Desktop Navigation */}

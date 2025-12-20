@@ -33,7 +33,7 @@ export const GiftOfferCard = memo(({ offer, products = [] }) => {
   const displayProducts = products.slice(0, 4);
   
   return (
-    <div className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-pink-100">
+    <div className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-pink-100 flex flex-col h-full">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-white to-pink-50/50 opacity-60"></div>
       
@@ -42,28 +42,28 @@ export const GiftOfferCard = memo(({ offer, products = [] }) => {
       <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-pink-100/40 to-transparent rounded-tr-full"></div>
       
       {/* Discount Badge */}
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-4 right-4 z-20 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
         <div className="relative">
-          <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg flex items-center gap-2">
+          <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-2xl font-black text-xl shadow-xl flex items-center gap-2 border-2 border-white/20">
             <TagIcon />
             <span>-{offer.discountPercentage}%</span>
           </div>
           {/* Animated Sparkle */}
-          <div className="absolute -top-1 -right-1 text-yellow-400 animate-pulse">
+          <div className="absolute -top-2 -right-2 text-yellow-400 animate-pulse drop-shadow-sm">
             <SparkleIcon />
           </div>
         </div>
       </div>
       
       {/* Content */}
-      <div className="relative z-10 p-6">
+      <div className="relative z-10 p-6 flex-1 flex flex-col">
         {/* Header */}
         <div className="flex items-start gap-4 mb-5">
           <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-pink-200 flex-shrink-0">
             <GiftIcon />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-2xl font-black text-gray-900 mb-2 leading-tight pr-12 group-hover:text-pink-600 transition-colors">
+            <h3 className="text-2xl font-black text-gray-900 mb-1 leading-tight pr-20 group-hover:text-pink-600 transition-colors">
               {offer.title}
             </h3>
             {offer.description && (
@@ -81,7 +81,7 @@ export const GiftOfferCard = memo(({ offer, products = [] }) => {
               <svg className="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-sm font-medium">Ends in:</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-pink-600/70">Flash Sale Ends In:</span>
             </div>
             <CountdownTimer endDate={offer.endDate} compact />
           </div>
@@ -122,7 +122,7 @@ export const GiftOfferCard = memo(({ offer, products = [] }) => {
         )}
         
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
           <span className="text-sm text-gray-500">
             <span className="font-semibold text-pink-600">{products.length}</span> products on sale
           </span>

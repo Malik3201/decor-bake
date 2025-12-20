@@ -138,10 +138,12 @@ export const MobileMenu = memo(({ isOpen, onClose }) => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold">DB</span>
-              </div>
-              <span className="font-bold text-gray-900">Menu</span>
+              <img 
+                src="/logo.png" 
+                alt="Decor Bake Logo" 
+                className="w-20 h-20 object-contain" 
+              />
+              <span className="font-bold text-gray-900 border-l border-gray-100 pl-3">Menu</span>
             </div>
             <button
               onClick={onClose}

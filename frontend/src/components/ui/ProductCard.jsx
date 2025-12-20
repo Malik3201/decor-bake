@@ -83,7 +83,7 @@ export const ProductCard = memo(({ product, showOffer = false }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="bg-white rounded-2xl shadow-soft overflow-hidden transition-all duration-300 hover:shadow-card-hover hover:-translate-y-2 border border-gray-100/50">
+      <div className="bg-white rounded-2xl shadow-soft overflow-hidden transition-[transform,box-shadow,opacity] duration-300 hover:shadow-card-hover hover:-translate-y-2 border border-gray-100/50">
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-gray-50">
           {/* Shimmer Loading */}

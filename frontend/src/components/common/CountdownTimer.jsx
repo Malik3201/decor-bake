@@ -81,7 +81,7 @@ CountdownTimer.displayName = 'CountdownTimer';
 // Time Box Component
 const TimeBox = memo(({ value, label, compact = false, dark = false, animate = false }) => {
   const baseClasses = compact
-    ? 'countdown-box py-1 px-2 min-w-[40px]'
+    ? 'flex flex-col items-center justify-center py-1.5 px-2 min-w-[50px] rounded-lg shadow-sm border border-pink-100'
     : 'countdown-box';
   
   const bgClasses = dark
@@ -89,11 +89,11 @@ const TimeBox = memo(({ value, label, compact = false, dark = false, animate = f
     : 'bg-white';
   
   const valueClasses = compact
-    ? `text-base font-bold ${dark ? 'text-white' : 'text-pink-600'}`
+    ? `text-xl font-black ${dark ? 'text-white' : 'text-pink-600'}`
     : `countdown-value ${dark ? 'text-white' : ''}`;
   
   const labelClasses = compact
-    ? `text-[10px] ${dark ? 'text-white/70' : 'text-gray-500'}`
+    ? `text-[10px] font-bold uppercase tracking-wider ${dark ? 'text-white/70' : 'text-gray-500'} mt-0.5`
     : `countdown-label ${dark ? 'text-white/70' : ''}`;
 
   return (
@@ -101,6 +101,7 @@ const TimeBox = memo(({ value, label, compact = false, dark = false, animate = f
       <span className={valueClasses}>
         {String(value).padStart(2, '0')}
       </span>
+      {label && <span className={labelClasses}>{label}</span>}
     </div>
   );
 });

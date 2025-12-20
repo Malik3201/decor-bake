@@ -32,15 +32,21 @@ export const ProductSlider = memo(({ title, products, showOffer = false, loading
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', checkScrollPosition);
+      scrollContainer.addEventListener('scroll', checkScrollPosition, { passive: true });
       checkScrollPosition();
       
-      // Recheck on resize
-      window.addEventListener('resize', checkScrollPosition);
+      let timeout;
+      const handleResize = () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(checkScrollPosition, 150);
+      };
+
+      window.addEventListener('resize', handleResize);
       
       return () => {
         scrollContainer.removeEventListener('scroll', checkScrollPosition);
-        window.removeEventListener('resize', checkScrollPosition);
+        window.removeEventListener('resize', handleResize);
+        clearTimeout(timeout);
       };
     }
   }, [checkScrollPosition, products]);

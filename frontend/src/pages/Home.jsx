@@ -56,84 +56,77 @@ const HandPickedIcon = () => (
 // Hero Section Component
 const HeroSection = memo(() => {
   return (
-    <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden">
-      {/* Background with gradient and patterns */}
-      <div className="absolute inset-0 hero-gradient hero-pattern"></div>
+    <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-900 py-20">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://i.ibb.co/ns81v0my/image.png"
+          alt="Baking Background" 
+          className="w-full h-full object-cover opacity-50 scale-105"
+          fetchPriority="high"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70"></div>
+      </div>
       
       {/* Decorative Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Floating shapes */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-pink-200/40 rounded-full blur-2xl animate-float"></div>
-        <div className="absolute top-40 right-20 w-32 h-32 bg-pink-300/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-40 left-1/4 w-24 h-24 bg-pink-100/50 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-20 right-1/3 w-16 h-16 bg-pink-200/40 rounded-full blur-xl animate-float" style={{ animationDelay: '0.5s' }}></div>
-        
-        {/* Decorative icons */}
-        <div className="absolute top-1/4 left-[15%] opacity-20 animate-bounce-slow">
-          <CakeIcon />
-        </div>
-        <div className="absolute top-1/3 right-[20%] opacity-15 animate-float" style={{ animationDelay: '1.5s' }}>
-          <SparklesIcon />
-        </div>
-        <div className="absolute bottom-1/3 left-[10%] opacity-15 animate-float" style={{ animationDelay: '0.8s' }}>
-          <GiftIcon />
-        </div>
-        <div className="absolute bottom-1/4 right-[15%] opacity-20 animate-bounce-slow" style={{ animationDelay: '1s' }}>
-          <SparklesIcon />
-        </div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-400/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
       </div>
       
       {/* Main Content */}
-      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        {/* Badge */}
-        <div className="animate-fade-in-down mb-6">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-pink-600 shadow-soft">
-            <span className="animate-pulse-pink w-2 h-2 bg-pink-500 rounded-full"></span>
-            New Collection Available
-          </span>
-        </div>
-        
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up">
-          <span className="text-gray-900">Sweet Creations for</span>
-          <br />
-          <span className="text-gradient">Every Celebration</span>
-        </h1>
-        
-        {/* Subheadline */}
-        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
-          Discover our handcrafted collection of premium baking supplies, decorations, 
-          and gifts that make every moment special.
-        </p>
-        
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
-          <Link to="/products">
-            <Button variant="primary" size="lg" className="px-8 py-4 text-lg shadow-pink-glow hover:shadow-lg transition-shadow">
-              Shop Now
-              <ArrowRightIcon />
-            </Button>
-          </Link>
-          <Link to="/categories">
-            <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-              Browse Categories
-            </Button>
-          </Link>
-        </div>
-        
-        {/* Stats */}
-        <div className="mt-12 flex flex-wrap justify-center gap-8 md:gap-12 animate-fade-in-up delay-500">
-          <StatItem value="10K+" label="Happy Customers" />
-          <StatItem value="500+" label="Products" />
-          <StatItem value="4.9" label="Star Rating" showStar />
+      <div className="relative z-20 text-center px-4 max-w-4xl mx-auto w-full flex flex-col items-center">
+        <div className="animate-fade-in-up">
+          {/* Badge */}
+          <div className="mb-8">
+            <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-pink-500/20 backdrop-blur-md rounded-full text-sm font-bold text-pink-300 border border-pink-500/30">
+              <span className="animate-pulse w-2.5 h-2.5 bg-pink-400 rounded-full"></span>
+              Premium Baking Supplies
+            </span>
+          </div>
+          
+          {/* Main Headline */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-[1.05] text-white">
+            Elevate Your <span className="text-pink-400">Sweet</span> 
+            <br />
+            Masterpieces
+          </h1>
+          
+          {/* Subheadline */}
+          <p className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Discover a curated collection of professional-grade decorations and baking essentials. 
+            Crafted for those who believe every cake tells a story.
+          </p>
+          
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link to="/products" className="w-full sm:w-auto">
+              <Button variant="primary" size="lg" className="w-full px-12 py-6 text-xl shadow-2xl shadow-pink-500/30 hover:scale-105 transition-all rounded-2xl">
+                Shop Collection
+                <ArrowRightIcon />
+              </Button>
+            </Link>
+            <Link to="/categories" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="w-full px-12 py-6 text-xl border-white/30 text-white hover:bg-white/10 transition-all backdrop-blur-sm rounded-2xl">
+                Explore Categories
+              </Button>
+            </Link>
+          </div>
+          
+          {/* Stats */}
+          <div className="mt-20 flex flex-wrap justify-center gap-12 md:gap-24 border-t border-white/10 pt-10">
+            <StatItem value="10K+" label="Happy Bakers" light />
+            <StatItem value="500+" label="Premium Products" light />
+            <StatItem value="4.9" label="Avg. Rating" showStar light />
+          </div>
         </div>
       </div>
       
-      {/* Bottom Wave */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 120" className="w-full h-auto fill-white">
-          <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
-        </svg>
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 animate-bounce-slow text-white/30">
+        <span className="text-[10px] uppercase tracking-[0.3em] font-black">Scroll Down</span>
+        <div className="w-px h-16 bg-gradient-to-b from-white/40 to-transparent"></div>
       </div>
     </section>
   );
@@ -142,13 +135,13 @@ const HeroSection = memo(() => {
 HeroSection.displayName = 'HeroSection';
 
 // Stat Item Component
-const StatItem = memo(({ value, label, showStar = false }) => (
-  <div className="text-center">
-    <div className="flex items-center justify-center gap-1">
+const StatItem = memo(({ value, label, showStar = false, light = false }) => (
+  <div className="text-center group">
+    <div className="flex items-center justify-center gap-1.5 mb-2">
       {showStar && <StarIcon />}
-      <span className="text-2xl md:text-3xl font-bold text-gray-900">{value}</span>
+      <span className={`text-3xl md:text-4xl font-black ${light ? 'text-white' : 'text-gray-900'} group-hover:text-pink-400 transition-colors`}>{value}</span>
     </div>
-    <span className="text-sm text-gray-500">{label}</span>
+    <span className={`text-xs md:text-sm font-bold ${light ? 'text-gray-400' : 'text-gray-500'} uppercase tracking-[0.15em]`}>{label}</span>
   </div>
 ));
 
@@ -275,53 +268,64 @@ export const Home = () => {
 
       const categoriesData = categoriesRes.data || [];
       const offersData = offersRes.data || [];
-      
+
       setCategories(categoriesData);
       setFeaturedProducts(featuredRes.data || []);
       setActiveOffers(offersData);
+      
+      // Set loading to false once the visible areas (Hero, Featured) have data
+      setLoading(false);
 
-      // Fetch products for each category (limit to 5 categories)
-      const categoryProductPromises = categoriesData.slice(0, 5).map(async (category) => {
-        try {
-          const productsRes = await productService.getProductsByCategory(category._id, 12);
-          return { categoryId: category._id, products: productsRes.data || [] };
-        } catch (error) {
-          console.error(`Error fetching products for category ${category._id}:`, error);
-          return { categoryId: category._id, products: [] };
-        }
+      // Fetch products for each category progressively
+      // Use chunks to avoid slamming the server with too many concurrent requests
+      const validCategories = categoriesData.slice(0, 10);
+      const chunkSize = 3;
+      
+      for (let i = 0; i < validCategories.length; i += chunkSize) {
+        const chunk = validCategories.slice(i, i + chunkSize);
+        const chunkResults = await Promise.all(
+          chunk.map(async (category) => {
+            try {
+              const productsRes = await productService.getProductsByCategory(category._id, 12);
+              return { categoryId: category._id, products: productsRes.data || [] };
+            } catch (error) {
+              console.error(`Error fetching products for category ${category._id}:`, error);
+              return { categoryId: category._id, products: [] };
+            }
+          })
+        );
+
+        setCategoryProducts(prev => {
+          const next = { ...prev };
+          chunkResults.forEach(({ categoryId, products }) => {
+            next[categoryId] = products;
+          });
+          return next;
+        });
+      }
+
+      // Fetch products for each offer progressively
+      const offerProductsResults = await Promise.all(
+        offersData.slice(0, 3).map(async (offer) => {
+          try {
+            const productsRes = await offerService.getOfferProducts(offer._id);
+            return { offerId: offer._id, products: productsRes.data?.products || [] };
+          } catch (error) {
+            console.error(`Error fetching products for offer ${offer._id}:`, error);
+            return { offerId: offer._id, products: [] };
+          }
+        })
+      );
+
+      setOfferProducts(prev => {
+        const next = { ...prev };
+        offerProductsResults.forEach(({ offerId, products }) => {
+          next[offerId] = products;
+        });
+        return next;
       });
-
-      // Fetch products for each offer (limit to 3 offers)
-      const offerProductPromises = offersData.slice(0, 3).map(async (offer) => {
-        try {
-          const productsRes = await offerService.getOfferProducts(offer._id);
-          return { offerId: offer._id, products: productsRes.data?.products || [] };
-        } catch (error) {
-          console.error(`Error fetching products for offer ${offer._id}:`, error);
-          return { offerId: offer._id, products: [] };
-        }
-      });
-
-      const categoryProductsResults = await Promise.all(categoryProductPromises);
-      const offerProductsResults = await Promise.all(offerProductPromises);
-
-      // Convert arrays to objects for easy lookup
-      const categoryProductsMap = {};
-      categoryProductsResults.forEach(({ categoryId, products }) => {
-        categoryProductsMap[categoryId] = products;
-      });
-
-      const offerProductsMap = {};
-      offerProductsResults.forEach(({ offerId, products }) => {
-        offerProductsMap[offerId] = products;
-      });
-
-      setCategoryProducts(categoryProductsMap);
-      setOfferProducts(offerProductsMap);
     } catch (error) {
       console.error('Error fetching home data:', error);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -331,9 +335,12 @@ export const Home = () => {
 
   // Memoize category sections to prevent unnecessary re-renders
   const categorySections = useMemo(() => {
-    return categories.slice(0, 5).map((category) => {
-      const products = categoryProducts[category._id] || [];
-      if (products.length === 0) return null;
+    // Collect all categories that have products
+    const validCategories = categories.filter(cat => (categoryProducts[cat._id]?.length || 0) > 0);
+    
+    // Take the first 5 (minimum) or more if available
+    return validCategories.slice(0, Math.max(5, validCategories.length)).map((category) => {
+      const products = categoryProducts[category._id];
       return (
         <CategoryProductRow
           key={category._id}
@@ -341,7 +348,7 @@ export const Home = () => {
           products={products}
         />
       );
-    }).filter(Boolean);
+    });
   }, [categories, categoryProducts]);
 
   if (loading) {

@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
@@ -29,8 +29,12 @@ const DecorativePanel = memo(() => (
     
     {/* Content */}
     <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-white text-center">
-      <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-8">
-        <span className="text-4xl font-bold">DB</span>
+      <div className="w-40 h-40 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mb-8 p-4">
+        <img 
+          src="/logo.png" 
+          alt="Decor Bake Logo" 
+          className="w-full h-full object-contain" 
+        />
       </div>
       <h2 className="text-3xl font-bold mb-4">Welcome to Decor Bake</h2>
       <p className="text-lg text-pink-100 max-w-md">
@@ -82,6 +86,15 @@ export const Login = () => {
 
   const from = location.state?.from?.pathname || '/';
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('expired')) {
+      showError('Your session has expired. Please log in again.');
+      // Clean up URL
+      navigate('/login', { replace: true });
+    }
+  }, [location.search, showError, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -114,9 +127,11 @@ export const Login = () => {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <span className="text-white font-bold text-2xl">DB</span>
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="Decor Bake Logo" 
+              className="w-48 h-48 object-contain mx-auto mb-4" 
+            />
           </div>
           
           {/* Header */}

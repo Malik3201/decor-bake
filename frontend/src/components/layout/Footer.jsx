@@ -62,11 +62,12 @@ export const Footer = memo(() => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-y-12 gap-x-8">
           {/* Brand Section */}
           <div className="sm:col-span-2 lg:col-span-2">
-            <Link to="/" className="inline-flex items-center space-x-2 mb-6 group">
-              <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <span className="text-white font-bold text-2xl">DB</span>
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-pink-500 bg-clip-text text-transparent">Decor Bake</span>
+            <Link to="/" className="inline-flex items-center mb-4 group">
+              <img 
+                src="/logo.png" 
+                alt="Decor Bake Logo" 
+                className="w-40 h-40 md:w-48 md:h-48 object-contain transition-transform group-hover:scale-105" 
+              />
             </Link>
             <p className="text-gray-600 mb-8 leading-relaxed max-w-sm">
               Your one-stop shop for premium baking supplies, decorations, and gifts. 

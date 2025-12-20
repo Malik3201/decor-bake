@@ -105,15 +105,13 @@ const Sidebar = memo(({ isOpen, onToggle }) => {
       } overflow-hidden`}
     >
       <div className="flex flex-col h-full">
-        {/* Logo */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <Link to="/admin" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-xl flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-lg">DB</span>
-            </div>
-            {isOpen && (
-              <span className="font-bold text-gray-900">Admin</span>
-            )}
+        <div className="flex flex-col items-center justify-center p-4 border-b border-gray-100 min-h-[120px]">
+          <Link to="/admin" className="flex items-center justify-center w-full">
+            <img 
+              src="/logo.png" 
+              alt="Decor Bake Logo" 
+              className="w-20 h-20 object-contain transition-transform hover:scale-105" 
+            />
           </Link>
         </div>
 
