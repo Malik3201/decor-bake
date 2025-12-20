@@ -21,6 +21,7 @@ import cartRoutes from './routes/cartRoutes.js';
 import promoRoutes from './routes/promoRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 const app = express();
 
@@ -80,6 +81,7 @@ app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/promos', promoRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/ai', aiRoutes);
 
 // 404 handler
 app.use((req, res) => {

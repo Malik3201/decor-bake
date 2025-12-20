@@ -7,6 +7,7 @@ import { ToastProvider } from './context/ToastContext.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import { ProtectedRoute } from './components/common/ProtectedRoute.jsx';
 import { Loading } from './components/common/Loading.jsx';
+import { AIChat } from './components/common/AIChat.jsx';
 
 // Dynamic Imports for Code Splitting
 const AdminLayout = lazy(() => import('./components/admin/AdminLayout.jsx').then(module => ({ default: module.AdminLayout })));
@@ -58,6 +59,7 @@ function App() {
                         <Outlet />
                       </main>
                       <Footer />
+                      <AIChat />
                     </div>
                   }
                 >
